@@ -8,13 +8,32 @@ describe("Utils test suite", () => {
       console.log("Setup");
     });
 
-    afterEach(() => {
-      // clear mocks
-      console.log("TearDown");
+    it("Should throw invalid arg error", () => {
+      function expectError() {
+        const actual = stringUtils.toUpperCase("");
+      }
+      expect(expectError).toThrow();
+      expect(expectError).toThrowError("Invalid arg!!");
+    });
+
+    it("Should throw invalid arg error - with arrow function", () => {
+      expect(() => {
+        const actual = stringUtils.toUpperCase("");
+      }).toThrowError("Invalid arg!!");
+    });
+
+    it.only("Should throw invalid arg error - with try catch", (done) => {
+      try {
+        stringUtils.toUpperCase("");
+        done("GetStringInfo should throw error for Invalid arg!!")
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error);
+        expect(error).toHaveProperty("message", "Invalid arg!!");
+        done();
+      }
     });
 
     it("Should return correct uppercase", () => {
-      console.log("Actual test");
       const actual = stringUtils.toUpperCase("abc");
 
       expect(actual).toBe("ABC");
