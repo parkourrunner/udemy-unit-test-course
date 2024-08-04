@@ -1,7 +1,7 @@
 import { getStringInfo, StringUtils, toUpperCase } from "../app/Utils";
 
 describe("Utils test suite", () => {
-  describe.only("StringUtils test suite", () => {
+  describe("StringUtils test suite", () => {
     let stringUtils;
     beforeEach(() => {
       stringUtils = new StringUtils();

@@ -18,6 +18,8 @@ export type stringInfo = {
   length: number;
   extraInfo: Object | undefined;
 };
+
+/* istanbul ignore next */
 export function getStringInfo(arg: string): stringInfo {
   return {
     lowerCase: arg.toLowerCase(),
