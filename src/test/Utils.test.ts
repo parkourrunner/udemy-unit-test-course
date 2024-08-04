@@ -22,7 +22,7 @@ describe("Utils test suite", () => {
       }).toThrowError("Invalid arg!!");
     });
 
-    it.only("Should throw invalid arg error - with try catch", (done) => {
+    it("Should throw invalid arg error - with try catch", (done) => {
       try {
         stringUtils.toUpperCase("");
         done("GetStringInfo should throw error for Invalid arg!!")
@@ -33,7 +33,7 @@ describe("Utils test suite", () => {
       }
     });
 
-    it("Should return correct uppercase", () => {
+    it.only("Should return correct uppercase", () => {
       const actual = stringUtils.toUpperCase("abc");
 
       expect(actual).toBe("ABC");
