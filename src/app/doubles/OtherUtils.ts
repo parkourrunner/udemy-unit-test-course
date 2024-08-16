@@ -24,3 +24,18 @@ export function toUpperCaseWithCallBack(
 
   return arg.toUpperCase();
 }
+
+export class OtherStringUtils {
+
+  public callExternalService() {
+    console.log("calling externals")
+  }
+
+  public toUpperCase(arg: string) {
+    return arg.toUpperCase();
+  }
+
+  public logString(arg: string) {
+    console.log(arg);
+  }
+}
