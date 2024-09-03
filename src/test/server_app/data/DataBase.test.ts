@@ -73,4 +73,14 @@ describe("DataBase test suite", () => {
     const actual = await sut.getBy("id", id);
     expect(actual).toBeUndefined();
   });
+
+  it("should get all elements", async () => {
+    await sut.insert(someObject);
+    await sut.insert(someObject2);
+    const expected = [someObject, someObject2];
+
+    const actual = await sut.getAllElements();
+
+    expect(actual).toEqual(expected);
+  });
 });
