@@ -1,8 +1,8 @@
-import { IncomingMessage, ServerResponse } from "http";
-import { Authorizer } from "../../app/server_app/auth/Authorizer";
-import { HTTP_CODES, HTTP_METHODS } from "../../app/server_app/model/ServerModel";
-import { Account } from "../../app/server_app/model/AuthModel";
-import { LoginHandler } from "../../app/server_app/handlers/LoginHandler"
+import { IncomingMessage, ServerResponse, STATUS_CODES } from "http";
+import { Authorizer } from "../../../app/server_app/auth/Authorizer";
+import { LoginHandler } from "../../../app/server_app/handlers/LoginHandler"
+import { Account } from "../../../app/server_app/model/AuthModel";
+import { HTTP_CODES, HTTP_METHODS } from "../../../app/server_app/model/ServerModel";
 
 const getRequestBodyMock = jest.fn();
 
@@ -54,15 +54,15 @@ describe('LoginHandler test suite', () => {
 
         await sut.handleRequest();
 
-        expect(authorizerMock.login).toBeCalledWith(
+        expect(authorizerMock.login).toHaveBeenCalledWith(
             someAccount.userName,
             someAccount.password
         )
         expect(responseMock.statusCode).toBe(HTTP_CODES.CREATED);
-        expect(responseMock.writeHead).toBeCalledWith(
+        expect(responseMock.writeHead).toHaveBeenCalledWith(
             HTTP_CODES.CREATED, { 'Content-Type': 'application/json' }
         )
-        expect(responseMock.write).toBeCalledWith(
+        expect(responseMock.write).toHaveBeenCalledWith(
             JSON.stringify({
                 token: someToken
             })
@@ -76,12 +76,12 @@ describe('LoginHandler test suite', () => {
 
         await sut.handleRequest();
 
-        expect(authorizerMock.login).toBeCalledWith(
+        expect(authorizerMock.login).toHaveBeenCalledWith(
             someAccount.userName,
             someAccount.password
         )
         expect(responseMock.statusCode).toBe(HTTP_CODES.NOT_fOUND);
-        expect(responseMock.write).toBeCalledWith(
+        expect(responseMock.write).toHaveBeenCalledWith(
             JSON.stringify('wrong username or password')
         )
     });
@@ -92,9 +92,9 @@ describe('LoginHandler test suite', () => {
 
         await sut.handleRequest();
 
-        expect(authorizerMock.login).not.toBeCalled();
+        expect(authorizerMock.login).not.toHaveBeenCalled();
         expect(responseMock.statusCode).toBe(HTTP_CODES.BAD_REQUEST);
-        expect(responseMock.write).toBeCalledWith(
+        expect(responseMock.write).toHaveBeenCalledWith(
             JSON.stringify('userName and password required')
         )
     });
@@ -103,9 +103,9 @@ describe('LoginHandler test suite', () => {
         request.method = HTTP_METHODS.GET;
         await sut.handleRequest();
 
-        expect(responseMock.writeHead).not.toBeCalled();
-        expect(responseMock.write).not.toBeCalled();
-        expect(getRequestBodyMock).not.toBeCalled();
+        expect(responseMock.writeHead).not.toHaveBeenCalled();
+        expect(responseMock.write).not.toHaveBeenCalled();
+        expect(getRequestBodyMock).not.toHaveBeenCalled();
     });
 
 })

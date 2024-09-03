@@ -1,9 +1,9 @@
 import { IncomingMessage, ServerResponse } from "http";
-import { Authorizer } from "../../app/server_app/auth/Authorizer";
-import { ReservationsDataAccess } from "../../app/server_app/data/ReservationsDataAccess";
-import { ReservationsHandler } from "../../app/server_app/handlers/ReservationsHandler";
-import { Reservation } from "../../app/server_app/model/ReservationModel";
-import { HTTP_CODES, HTTP_METHODS } from "../../app/server_app/model/ServerModel";
+import { Authorizer } from "../../../app/server_app/auth/Authorizer";
+import { ReservationsDataAccess } from "../../../app/server_app/data/ReservationsDataAccess";
+import { ReservationsHandler } from "../../../app/server_app/handlers/ReservationsHandler";
+import { Reservation } from "../../../app/server_app/model/ReservationModel";
+import { HTTP_CODES, HTTP_METHODS } from "../../../app/server_app/model/ServerModel";
 
 
 const getRequestBodyMock = jest.fn();
@@ -80,8 +80,8 @@ describe('ReservationsHandler test suite', () => {
             await sut.handleRequest();
 
             expect(responseMock.statusCode).toBe(HTTP_CODES.CREATED);
-            expect(responseMock.writeHead).toBeCalledWith(HTTP_CODES.CREATED, { 'Content-Type': 'application/json' });
-            expect(responseMock.write).toBeCalledWith(JSON.stringify({ reservationId: someReservationId }))
+            expect(responseMock.writeHead).toHaveBeenCalledWith(HTTP_CODES.CREATED, { 'Content-Type': 'application/json' });
+            expect(responseMock.write).toHaveBeenCalledWith(JSON.stringify({ reservationId: someReservationId }))
         })
 
         it('should not create reservation from invalid request', async () => {
@@ -90,7 +90,7 @@ describe('ReservationsHandler test suite', () => {
             await sut.handleRequest();
 
             expect(responseMock.statusCode).toBe(HTTP_CODES.BAD_REQUEST);
-            expect(responseMock.write).toBeCalledWith(JSON.stringify('Incomplete reservation!'))
+            expect(responseMock.write).toHaveBeenCalledWith(JSON.stringify('Incomplete reservation!'))
         })
 
         it('should not create reservation from invalid fields in request', async () => {
@@ -100,7 +100,7 @@ describe('ReservationsHandler test suite', () => {
             await sut.handleRequest();
 
             expect(responseMock.statusCode).toBe(HTTP_CODES.BAD_REQUEST);
-            expect(responseMock.write).toBeCalledWith(JSON.stringify('Incomplete reservation!'))
+            expect(responseMock.write).toHaveBeenCalledWith(JSON.stringify('Incomplete reservation!'))
         })
     });
 
@@ -115,8 +115,8 @@ describe('ReservationsHandler test suite', () => {
 
             await sut.handleRequest();
 
-            expect(responseMock.writeHead).toBeCalledWith(HTTP_CODES.OK, { 'Content-Type': 'application/json' });
-            expect(responseMock.write).toBeCalledWith(JSON.stringify([someReservation]));
+            expect(responseMock.writeHead).toHaveBeenCalledWith(HTTP_CODES.OK, { 'Content-Type': 'application/json' });
+            expect(responseMock.write).toHaveBeenCalledWith(JSON.stringify([someReservation]));
         });
 
         it('should return reservation for existing id', async () => {
@@ -125,8 +125,8 @@ describe('ReservationsHandler test suite', () => {
 
             await sut.handleRequest();
 
-            expect(responseMock.writeHead).toBeCalledWith(HTTP_CODES.OK, { 'Content-Type': 'application/json' });
-            expect(responseMock.write).toBeCalledWith(JSON.stringify(someReservation));
+            expect(responseMock.writeHead).toHaveBeenCalledWith(HTTP_CODES.OK, { 'Content-Type': 'application/json' });
+            expect(responseMock.write).toHaveBeenCalledWith(JSON.stringify(someReservation));
         });
 
         it('should return not found for non existing id', async () => {
@@ -136,7 +136,7 @@ describe('ReservationsHandler test suite', () => {
             await sut.handleRequest();
 
             expect(responseMock.statusCode).toBe(HTTP_CODES.NOT_fOUND)
-            expect(responseMock.write).toBeCalledWith(JSON.stringify(
+            expect(responseMock.write).toHaveBeenCalledWith(JSON.stringify(
                 `Reservation with id ${someReservationId} not found`
             ));
         });
@@ -147,7 +147,7 @@ describe('ReservationsHandler test suite', () => {
             await sut.handleRequest();
 
             expect(responseMock.statusCode).toBe(HTTP_CODES.BAD_REQUEST)
-            expect(responseMock.write).toBeCalledWith(JSON.stringify(
+            expect(responseMock.write).toHaveBeenCalledWith(JSON.stringify(
                 'Please provide an ID!'
             ));
         });
@@ -165,7 +165,7 @@ describe('ReservationsHandler test suite', () => {
             await sut.handleRequest();
 
             expect(responseMock.statusCode).toBe(HTTP_CODES.NOT_fOUND)
-            expect(responseMock.write).toBeCalledWith(JSON.stringify(
+            expect(responseMock.write).toHaveBeenCalledWith(JSON.stringify(
                 `Reservation with id ${someReservationId} not found`
             ));
         });
@@ -176,7 +176,7 @@ describe('ReservationsHandler test suite', () => {
             await sut.handleRequest();
 
             expect(responseMock.statusCode).toBe(HTTP_CODES.BAD_REQUEST)
-            expect(responseMock.write).toBeCalledWith(JSON.stringify(
+            expect(responseMock.write).toHaveBeenCalledWith(JSON.stringify(
                 'Please provide an ID!'
             ));
         });
@@ -191,7 +191,7 @@ describe('ReservationsHandler test suite', () => {
             await sut.handleRequest();
 
             expect(responseMock.statusCode).toBe(HTTP_CODES.BAD_REQUEST)
-            expect(responseMock.write).toBeCalledWith(JSON.stringify(
+            expect(responseMock.write).toHaveBeenCalledWith(JSON.stringify(
                 'Please provide valid fields to update!'
             ));
         });
@@ -204,7 +204,7 @@ describe('ReservationsHandler test suite', () => {
             await sut.handleRequest();
 
             expect(responseMock.statusCode).toBe(HTTP_CODES.BAD_REQUEST)
-            expect(responseMock.write).toBeCalledWith(JSON.stringify(
+            expect(responseMock.write).toHaveBeenCalledWith(JSON.stringify(
                 'Please provide valid fields to update!'
             ));
         });
@@ -220,19 +220,19 @@ describe('ReservationsHandler test suite', () => {
 
             await sut.handleRequest();
 
-            expect(reservationsDataAccessMock.updateReservation).toBeCalledTimes(2);
-            expect(reservationsDataAccessMock.updateReservation).toBeCalledWith(
+            expect(reservationsDataAccessMock.updateReservation).toHaveBeenCalledTimes(2);
+            expect(reservationsDataAccessMock.updateReservation).toHaveBeenCalledWith(
                 someReservationId,
                 'startDate',
                 updateObject.startDate
             );
-            expect(reservationsDataAccessMock.updateReservation).toBeCalledWith(
+            expect(reservationsDataAccessMock.updateReservation).toHaveBeenCalledWith(
                 someReservationId,
                 'endDate',
                 updateObject.endDate
             );
-            expect(responseMock.writeHead).toBeCalledWith(HTTP_CODES.OK, { 'Content-Type': 'application/json' });
-            expect(responseMock.write).toBeCalledWith(JSON.stringify(
+            expect(responseMock.writeHead).toHaveBeenCalledWith(HTTP_CODES.OK, { 'Content-Type': 'application/json' });
+            expect(responseMock.write).toHaveBeenCalledWith(JSON.stringify(
                 `Updated ${Object.keys(updateObject)} of reservation ${someReservationId}`
             ));
         });
@@ -248,9 +248,9 @@ describe('ReservationsHandler test suite', () => {
 
             await sut.handleRequest();
 
-            expect(reservationsDataAccessMock.deleteReservation).toBeCalledWith(someReservationId);
+            expect(reservationsDataAccessMock.deleteReservation).toHaveBeenCalledWith(someReservationId);
             expect(responseMock.statusCode).toBe(HTTP_CODES.OK);
-            expect(responseMock.write).toBeCalledWith(JSON.stringify(
+            expect(responseMock.write).toHaveBeenCalledWith(JSON.stringify(
                 `Deleted reservation with id ${someReservationId}`
             ));
         })
@@ -261,7 +261,7 @@ describe('ReservationsHandler test suite', () => {
             await sut.handleRequest();
 
             expect(responseMock.statusCode).toBe(HTTP_CODES.BAD_REQUEST)
-            expect(responseMock.write).toBeCalledWith(JSON.stringify(
+            expect(responseMock.write).toHaveBeenCalledWith(JSON.stringify(
                 'Please provide an ID!'
             ));
         });
@@ -276,7 +276,7 @@ describe('ReservationsHandler test suite', () => {
 
 
         expect(responseMock.statusCode).toBe(HTTP_CODES.UNAUTHORIZED)
-        expect(responseMock.write).toBeCalledWith(JSON.stringify(
+        expect(responseMock.write).toHaveBeenCalledWith(JSON.stringify(
             'Unauthorized operation!'
         ));
     })
@@ -287,7 +287,7 @@ describe('ReservationsHandler test suite', () => {
         await sut.handleRequest();
 
         expect(responseMock.statusCode).toBe(HTTP_CODES.UNAUTHORIZED)
-        expect(responseMock.write).toBeCalledWith(JSON.stringify(
+        expect(responseMock.write).toHaveBeenCalledWith(JSON.stringify(
             'Unauthorized operation!'
         ));
     });
@@ -297,8 +297,8 @@ describe('ReservationsHandler test suite', () => {
         
         await sut.handleRequest();
 
-        expect(responseMock.write).not.toBeCalled();
-        expect(responseMock.writeHead).not.toBeCalled();
+        expect(responseMock.write).not.toHaveBeenCalled();
+        expect(responseMock.writeHead).not.toHaveBeenCalled();
     });
 
 
